@@ -1,0 +1,18 @@
+### Request to fetch about-me information with JWT token and login credentials in body
+GET http://localhost:8080/api/user/security/about-me
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NzA0ODM1NzIsImV4cCI6MTc3MDQ4NzE3Miwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoidG9tYXRhIn0.Ca9z6BTqrvRiUr_JBo8PGYTYUO4W0ehGusZSHRFUdQ9o_QaKYfSpH0hZUS8p-SY-665x3Y2424QDsNHMcXj06elYO6TZlUv1x4VIU-kBUOkEs1-qkZfgf6mlJcuvaiOc17jK3d35KW4nGUKfXb78PXejOCpBuUPW3yYmTx3NCX2p4epfFMOgy28cm6XfL8xSNSxnQar7AqadQC96--enAgIEDRpRN7Qvq741pMyYbSFtMX-iFEod_hYXi7X-Ut3LfV2Rx3fJngwsdwK1n8YehPFGkoeCNIYa4lyn9qWiZcyYRh2BjWiPq130l4meVaiPhSkq_Aew2UA7rkKwHRRFiA
+Content-Type: application/json
+
+{
+    "username": "tomata",
+    "password": "test"
+}
+
+###
+GET http://localhost:8080/api/login
+Content-Type: application/json
+
+{
+    "username": "tomata",
+    "password": "test"
+}

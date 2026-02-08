@@ -1,0 +1,41 @@
+security:
+    password_hashers:
+        App\Domain\User\Entity\User:
+            algorithm: auto
+
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Domain\User\Entity\User
+                property: username
+        # used to reload user from session & other features (e.g. switch_user)
+
+    firewalls:
+        login:
+            pattern: ^/api/login
+            stateless: true
+            json_login:
+                check_path: /api/login
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern:
+                - ^/api/user/security/
+                - ^/api/task/security/
+            stateless: true
+            jwt: ~
+
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: app_user_provider
+
+    # to jest będzie dobre dla tej funkcjonalności: Lista wszystkich zadań (dla admina)
+    access_control:
+        - { path: ^/api/user/security/about-me, roles: ROLE_USER }
+        - { path: ^/api/task/security/list-all-tasks, roles: ROLE_ADMIN }
