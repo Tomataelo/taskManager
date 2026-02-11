@@ -2,7 +2,7 @@
 
 namespace App\Domain\User\Entity;
 
-use App\Infrastructure\Repository\AddressRepository;
+use App\Infrastructure\Repository\User\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]

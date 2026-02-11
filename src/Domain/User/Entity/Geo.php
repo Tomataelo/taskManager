@@ -2,7 +2,7 @@
 
 namespace App\Domain\User\Entity;
 
-use App\Infrastructure\Repository\GeoRepository;
+use App\Infrastructure\Repository\User\GeoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: GeoRepository::class)]

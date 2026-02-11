@@ -2,7 +2,7 @@
 
 namespace App\Domain\User\Entity;
 
-use App\Infrastructure\Repository\CompanyRepository;
+use App\Infrastructure\Repository\User\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]

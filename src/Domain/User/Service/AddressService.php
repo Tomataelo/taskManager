@@ -3,11 +3,9 @@
 namespace App\Domain\User\Service;
 
 use App\Application\Dto\User\AddressDto;
-use App\Application\Dto\User\UserDto;
 use App\Domain\User\Entity\Address;
 use App\Domain\User\Entity\User;
-use App\Infrastructure\Repository\AddressRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Infrastructure\Repository\User\AddressRepository;
 
 readonly class AddressService
 {

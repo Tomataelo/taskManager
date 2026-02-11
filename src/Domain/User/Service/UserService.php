@@ -4,8 +4,7 @@ namespace App\Domain\User\Service;
 
 use App\Application\Dto\User\UserDto;
 use App\Domain\User\Entity\User;
-use App\Infrastructure\Repository\UserRepository;
-use phpDocumentor\Reflection\Types\False_;
+use App\Infrastructure\Repository\User\UserRepository;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 readonly class UserService
@@ -45,11 +44,15 @@ readonly class UserService
         return bin2hex(random_bytes(16));
     }
 
-    public function getUserByUsername(string $username): UserDto
+    public function getUserByUsername(string $username, $returnEntity = false): UserDto|User
     {
         $user = $this->userRepository->findOneByUsername($username);
         if (!$user) {
             throw new ResourceNotFoundException();
+        }
+
+        if ($returnEntity) {
+            return $user;
         }
 
         return new UserDto(

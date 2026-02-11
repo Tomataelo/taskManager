@@ -5,7 +5,7 @@ namespace App\Domain\User\Service;
 use App\Application\Dto\User\GeoDto;
 use App\Domain\User\Entity\Address;
 use App\Domain\User\Entity\Geo;
-use App\Infrastructure\Repository\GeoRepository;
+use App\Infrastructure\Repository\User\GeoRepository;
 
 class GeoService
 {

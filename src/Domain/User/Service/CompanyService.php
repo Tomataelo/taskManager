@@ -5,7 +5,7 @@ namespace App\Domain\User\Service;
 use App\Application\Dto\User\CompanyDto;
 use App\Domain\User\Entity\Company;
 use App\Domain\User\Entity\User;
-use App\Infrastructure\Repository\CompanyRepository;
+use App\Infrastructure\Repository\User\CompanyRepository;
 
 readonly class CompanyService
 {
