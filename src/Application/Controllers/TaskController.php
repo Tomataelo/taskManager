@@ -3,22 +3,15 @@
 namespace App\Application\Controllers;
 
 use App\Application\Dto\Task\TaskDto;
+use App\Domain\Task\Service\EventStoreService;
 use App\Domain\Task\Service\TaskService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-
-// CO ZROBIĆ JESZCZE!! //
-
-// do wszystkich kontrolerów ładnie bym dodał try catche
-// tutaj wszędzie dorobic event sourcing
-
-// END CO ZROBIĆ JESZCZE!! //
 
 #[Route('api/task/security')]
 class TaskController extends AbstractController
@@ -37,7 +30,7 @@ class TaskController extends AbstractController
         $taskDTO = $this->serializer->deserialize($request->getContent(), TaskDTO::class, 'json');
         $newTask = $this->taskService->create($taskDTO, $this->getUser()->getUserIdentifier());
 
-        return $this->json($newTask);
+        return new JsonResponse($newTask);
     }
 
     #[Route('/change-status/{id}', methods: ['PUT'])]
@@ -53,7 +46,6 @@ class TaskController extends AbstractController
             return new JsonResponse(["error" => $e->getMessage()], 500);
         }
 
-        // tutaj sie zastanowic co ma zwracac czy poprostu 1 czy dto
         return new JsonResponse(1, 200);
     }
 
@@ -79,5 +71,11 @@ class TaskController extends AbstractController
         $allTasksJson = $this->serializer->serialize($allTasks, 'json');
 
         return new JsonResponse($allTasksJson, 200, [], true);
+    }
+
+    #[Route('/history/{id}', methods: ['GET'])]
+    public function taskHistory(int $id, EventStoreService $eventStoreService): JsonResponse
+    {
+        return new JsonResponse($eventStoreService->getHistoryOfTask($id));
     }
 }

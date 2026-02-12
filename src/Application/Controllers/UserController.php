@@ -32,8 +32,7 @@ class UserController extends AbstractController
     {
         $importedUsers = $userImportProvider->importUsers();
 
-        // tutaj jeszcze przemyśleć co chce zwracać i czy używanie $this->json jest git
-        return $this->json($importedUsers);
+        return new JsonResponse($importedUsers);
     }
 
     #[Route('/security/about-me', methods: ['GET'])]
@@ -45,6 +44,6 @@ class UserController extends AbstractController
             return $this->json([$e->getMessage()]);
         }
 
-        return $this->json($user);
+        return new JsonResponse($user);
     }
 }

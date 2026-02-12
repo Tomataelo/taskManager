@@ -2,7 +2,7 @@
 
 namespace App\Domain\Task\EventSourcing;
 
-use App\Domain\Task\EventSourcing\Entity\EventStore;
+use App\Domain\Task\Entity\EventStore;
 use App\Domain\Task\EventSourcing\Events\TaskEventInterface;
 use App\Infrastructure\EventStore\EventStoreRepository;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;

@@ -2,8 +2,9 @@
 
 namespace App\Infrastructure\EventStore;
 
-use App\Domain\Task\EventSourcing\Entity\EventStore;
+use App\Domain\Task\Entity\EventStore;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,6 +19,17 @@ class EventStoreRepository extends ServiceEntityRepository
     )
     {
         parent::__construct($registry, EventStore::class);
+    }
+
+    public function findByTaskIdAndEventType(int $taskId, string $eventType): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.event_type = :type')
+            ->andWhere("JSON_EXTRACT(e.payload, '$.taskId') = :taskId")
+            ->setParameter('type', $eventType)
+            ->setParameter('taskId', $taskId)
+            ->getQuery()
+            ->getResult();
     }
 
     public function save(EventStore $eventStore)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Task\EventSourcing\Entity;
+namespace App\Domain\Task\Entity;
 
 use App\Infrastructure\EventStore\EventStoreRepository;
 use Doctrine\ORM\Mapping as ORM;

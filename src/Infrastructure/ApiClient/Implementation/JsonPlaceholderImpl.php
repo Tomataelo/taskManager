@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Infrastructure\ApiClient;
+namespace App\Infrastructure\ApiClient\Implementation;
 
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
-class ApiClient
+class JsonPlaceholderImpl implements ApiInterface
 {
     private const BASE_URL = 'https://jsonplaceholder.typicode.com/';
 

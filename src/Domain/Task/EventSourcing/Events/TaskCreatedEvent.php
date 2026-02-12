@@ -12,7 +12,6 @@ readonly class TaskCreatedEvent implements TaskEventInterface
         private string            $description,
         private TaskStatus        $status,
         private int               $userId,
-        private DateTimeImmutable $createdAt
     ) {}
 
     public function getNameOfEvent(): string
@@ -27,18 +26,12 @@ readonly class TaskCreatedEvent implements TaskEventInterface
             'description' => $this->description,
             'status' => $this->status->value,
             'userId' => $this->userId,
-            'createdAt' => $this->createdAt->format(DATE_ATOM),
         ];
     }
 
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getCreatedAt(): DateTimeImmutable
-    {
-        return $this->createdAt;
     }
 
     public function getUserId(): int
