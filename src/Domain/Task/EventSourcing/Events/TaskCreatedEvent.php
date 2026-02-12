@@ -3,7 +3,6 @@
 namespace App\Domain\Task\EventSourcing\Events;
 
 use App\Domain\Task\TaskStatus;
-use DateTimeImmutable;
 
 readonly class TaskCreatedEvent implements TaskEventInterface
 {

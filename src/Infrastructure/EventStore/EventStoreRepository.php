@@ -4,7 +4,6 @@ namespace App\Infrastructure\EventStore;
 
 use App\Domain\Task\Entity\EventStore;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -23,13 +23,7 @@ class TaskService
     public function create(TaskDTO $taskDTO, string $username): TaskDto
     {
         $user = $this->userService->getUserByUsername($username, true);
-
-        $event = $this->eventFactory->created(
-            $taskDTO->getName(),
-            $taskDTO->getDescription(),
-            $taskDTO->getStatus(),
-            $user->getId()
-        );
+        $event = $this->eventFactory->created($taskDTO, $user->getId());
 
         $this->eventService->execute($event);
 
@@ -47,10 +41,7 @@ class TaskService
             throw new NotFoundHttpException('Task status not found');
         }
 
-        $event = $this->eventFactory->statusChanged(
-            $taskEntity->getId(),
-            $taskStatus,
-        );
+        $event = $this->eventFactory->statusChanged($taskEntity->getId(), $taskStatus);
 
         $this->eventService->execute($event);
     }

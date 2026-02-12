@@ -2,19 +2,18 @@
 
 namespace App\Domain\Task\EventSourcing\Events;
 
-use App\Domain\Task\Entity\Task;
+use App\Application\Dto\Task\TaskDto;
 use App\Domain\Task\TaskStatus;
-use DateTimeImmutable;
 
 class EventFactory
 {
-    public function created(string $name, string $description, TaskStatus $status, int $userId): TaskCreatedEvent
+    public function created(TaskDto $task, int $userId): TaskCreatedEvent
     {
-        return new TaskCreatedEvent($name, $description, $status, $userId, new DateTimeImmutable());
+        return new TaskCreatedEvent($task->getName(), $task->getDescription(), $task->getStatus(), $userId);
     }
 
     public function statusChanged(int $taskId, TaskStatus $status): TaskStatusUpdatedEvent
     {
-        return new TaskStatusUpdatedEvent($taskId, $status, new DateTimeImmutable());
+        return new TaskStatusUpdatedEvent($taskId, $status);
     }
 }
