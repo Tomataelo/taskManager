@@ -15,9 +15,6 @@ readonly class EventService
         private MessageBusInterface  $messageBus
     ){}
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function execute(TaskEventInterface $event): void
     {
         $newEventStore = new EventStore();

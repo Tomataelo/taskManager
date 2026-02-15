@@ -2,56 +2,73 @@
 
 namespace App\Application\Controllers;
 
+use App\Application\Command\Task\TaskCreateCommand;
+use App\Application\Command\Task\TaskCreateCommandHandler;
+use App\Application\Command\Task\TaskStatusUpdateCommand;
+use App\Application\Command\Task\TaskStatusUpdateCommandHandler;
 use App\Application\Dto\Task\TaskDto;
 use App\Domain\Task\Service\EventStoreService;
 use App\Domain\Task\Service\TaskService;
+use App\Domain\Task\TaskStatus;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('api/task/security')]
 class TaskController extends AbstractController
 {
     public function __construct(
-        private readonly SerializerInterface $serializer,
-        private readonly TaskService         $taskService
+        private readonly SerializerInterface            $serializer,
+        private readonly TaskCreateCommandHandler       $taskCreateCommandHandler,
+        private readonly TaskStatusUpdateCommandHandler $taskStatusUpdateCommandHandler,
+        private readonly TaskService                    $taskService,
     ){}
 
-    /**
-     * @throws ExceptionInterface
-     */
     #[Route('/', methods: ['POST'])]
     public function createTask(Request $request): JsonResponse
     {
         $taskDTO = $this->serializer->deserialize($request->getContent(), TaskDTO::class, 'json');
-        $newTask = $this->taskService->create($taskDTO, $this->getUser()->getUserIdentifier());
 
-        return new JsonResponse($newTask);
+        $taskCreateCommand = new TaskCreateCommand(
+            $taskDTO->getName(),
+            $taskDTO->getDescription(),
+            $taskDTO->getStatus(),
+            $this->getUser()->getUserIdentifier()
+        );
+
+        $this->taskCreateCommandHandler->create($taskCreateCommand);
+
+        return new JsonResponse(1, 204);
     }
 
     #[Route('/change-status/{id}', methods: ['PUT'])]
     public function changeStatus(int $id, Request $request): JsonResponse
     {
+        $data = json_decode($request->getContent());
+        if (!isset($data->status)) {
+            throw new BadRequestHttpException('Missing status field');
+        }
+
         try {
 
-            $this->taskService->changeStatus($id, json_decode($request->getContent()));
+            $taskStatusUpdateCommand = new TaskStatusUpdateCommand(
+                $id,
+                TaskStatus::from($data->status)
+            );
+
+            $this->taskStatusUpdateCommandHandler->changeStatus($taskStatusUpdateCommand);
 
         } catch (NotFoundHttpException $e) {
             return new JsonResponse(["error" => $e->getMessage()], 404);
-        } catch (\ValueError $e) {
-            return new JsonResponse(["error" => $e->getMessage()], 500);
         }
 
-        return new JsonResponse(1, 200);
+        return new JsonResponse(1, 204);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     #[Route('/my-tasks', methods: ['GET'])]
     public function myTasks(): JsonResponse
     {
@@ -61,9 +78,6 @@ class TaskController extends AbstractController
         return new JsonResponse($userTasksJson, 200, [], true);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     #[Route('/list-all-tasks', methods: ['GET'])]
     public function getAllTasks(): JsonResponse
     {
