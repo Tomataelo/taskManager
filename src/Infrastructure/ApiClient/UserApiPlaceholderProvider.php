@@ -15,13 +15,6 @@ readonly class UserApiPlaceholderProvider
         private ApiInterface $apiClient
     ){}
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function getUsers(): array
     {
         return $this->apiClient->get('users')->toArray();
